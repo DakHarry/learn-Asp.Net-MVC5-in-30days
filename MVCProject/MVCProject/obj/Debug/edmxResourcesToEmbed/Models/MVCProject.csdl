@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="MVCProjectModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Members">
+    <Key>
+      <PropertyRef Name="MemberId" />
+    </Key>
+    <Property Name="MemberId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="FirstName" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
+    <Property Name="LastName" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
+    <Property Name="Gender" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+    <Property Name="DateOfBirth" Type="DateTime" Precision="3" />
+    <Property Name="TelephoneNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="Street1" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="City" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="ZipCode" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
+    <Property Name="Email" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="Product">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ProductName" Type="String" MaxLength="80" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="CompanyId" Type="Int32" Nullable="false" />
+    <Property Name="Price" Type="Decimal" Precision="10" Scale="4" Nullable="false" />
+    <Property Name="Active" Type="Boolean" />
+    <Property Name="Stock" Type="Int32" />
+    <Property Name="IdDeleted" Type="Boolean" Nullable="false" />
+    <NavigationProperty Name="Company" Relationship="MVCProjectModel.FK__Product__Company__3A81B327" FromRole="Product" ToRole="Company" />
+  </EntityType>
+  <EntityContainer Name="MVCProjectEntities1" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Members" EntityType="Self.Members" />
+    <EntitySet Name="Product" EntityType="Self.Product" />
+    <EntitySet Name="Company" EntityType="MVCProjectModel.Company" />
+    <AssociationSet Name="FK__Product__Company__3A81B327" Association="MVCProjectModel.FK__Product__Company__3A81B327">
+      <End Role="Company" EntitySet="Company" />
+      <End Role="Product" EntitySet="Product" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="Company">
+    <Key>
+      <PropertyRef Name="CompanyId" />
+    </Key>
+    <Property Name="CompanyId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Product" Relationship="MVCProjectModel.FK__Product__Company__3A81B327" FromRole="Company" ToRole="Product" />
+  </EntityType>
+  <Association Name="FK__Product__Company__3A81B327">
+    <End Type="MVCProjectModel.Company" Role="Company" Multiplicity="1" />
+    <End Type="MVCProjectModel.Product" Role="Product" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Company">
+        <PropertyRef Name="CompanyId" />
+      </Principal>
+      <Dependent Role="Product">
+        <PropertyRef Name="CompanyId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>

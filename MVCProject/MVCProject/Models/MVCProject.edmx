@@ -4,15 +4,13 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="MVCProjectModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="MVCProjectModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Company">
           <Key>
             <PropertyRef Name="CompanyId" />
           </Key>
           <Property Name="CompanyId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Name" Type="nvarchar" MaxLength="1" Nullable="false" />
-          <Property Name="Active" Type="bit" />
-          <Property Name="IdDeleted" Type="bit" Nullable="false" />
+          <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
         </EntityType>
         <EntityType Name="Members">
           <Key>
@@ -62,21 +60,10 @@
             <End Role="Product" EntitySet="Product" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="MVCProjectModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
-        <EntityType Name="Company">
-          <Key>
-            <PropertyRef Name="CompanyId" />
-          </Key>
-          <Property Name="CompanyId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" MaxLength="1" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Active" Type="Boolean" />
-          <Property Name="IdDeleted" Type="Boolean" Nullable="false" />
-          <NavigationProperty Name="Product" Relationship="Self.FK__Product__Company__3A81B327" FromRole="Company" ToRole="Product" />
-        </EntityType>
         <EntityType Name="Members">
           <Key>
             <PropertyRef Name="MemberId" />
@@ -103,11 +90,28 @@
           <Property Name="Active" Type="Boolean" />
           <Property Name="Stock" Type="Int32" />
           <Property Name="IdDeleted" Type="Boolean" Nullable="false" />
-          <NavigationProperty Name="Company" Relationship="Self.FK__Product__Company__3A81B327" FromRole="Product" ToRole="Company" />
+          <NavigationProperty Name="Company" Relationship="MVCProjectModel.FK__Product__Company__3A81B327" FromRole="Product" ToRole="Company" />
+        </EntityType>
+        <EntityContainer Name="MVCProjectEntities1" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Members" EntityType="Self.Members" />
+          <EntitySet Name="Product" EntityType="Self.Product" />
+          <EntitySet Name="Company" EntityType="MVCProjectModel.Company" />
+          <AssociationSet Name="FK__Product__Company__3A81B327" Association="MVCProjectModel.FK__Product__Company__3A81B327">
+            <End Role="Company" EntitySet="Company" />
+            <End Role="Product" EntitySet="Product" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Company">
+          <Key>
+            <PropertyRef Name="CompanyId" />
+          </Key>
+          <Property Name="CompanyId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Product" Relationship="MVCProjectModel.FK__Product__Company__3A81B327" FromRole="Company" ToRole="Product" />
         </EntityType>
         <Association Name="FK__Product__Company__3A81B327">
-          <End Role="Company" Type="Self.Company" Multiplicity="1" />
-          <End Role="Product" Type="Self.Product" Multiplicity="*" />
+          <End Type="MVCProjectModel.Company" Role="Company" Multiplicity="1" />
+          <End Type="MVCProjectModel.Product" Role="Product" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Company">
               <PropertyRef Name="CompanyId" />
@@ -117,31 +121,12 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityContainer Name="MVCProjectEntities1" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="Company" EntityType="Self.Company" />
-          <EntitySet Name="Members" EntityType="Self.Members" />
-          <EntitySet Name="Product" EntityType="Self.Product" />
-          <AssociationSet Name="FK__Product__Company__3A81B327" Association="Self.FK__Product__Company__3A81B327">
-            <End Role="Company" EntitySet="Company" />
-            <End Role="Product" EntitySet="Product" />
-          </AssociationSet>
-        </EntityContainer>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="MVCProjectModelStoreContainer" CdmEntityContainer="MVCProjectEntities1">
-          <EntitySetMapping Name="Company">
-            <EntityTypeMapping TypeName="MVCProjectModel.Company">
-              <MappingFragment StoreEntitySet="Company">
-                <ScalarProperty Name="CompanyId" ColumnName="CompanyId" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Active" ColumnName="Active" />
-                <ScalarProperty Name="IdDeleted" ColumnName="IdDeleted" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="Members">
             <EntityTypeMapping TypeName="MVCProjectModel.Members">
               <MappingFragment StoreEntitySet="Members">
@@ -168,6 +153,14 @@
                 <ScalarProperty Name="Active" ColumnName="Active" />
                 <ScalarProperty Name="Stock" ColumnName="Stock" />
                 <ScalarProperty Name="IdDeleted" ColumnName="IdDeleted" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Company">
+            <EntityTypeMapping TypeName="MVCProjectModel.Company">
+              <MappingFragment StoreEntitySet="Company">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="CompanyId" ColumnName="CompanyId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

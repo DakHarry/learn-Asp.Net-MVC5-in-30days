@@ -25,8 +25,8 @@ namespace MVCProject.Models
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<Company> Company { get; set; }
         public virtual DbSet<Members> Members { get; set; }
         public virtual DbSet<Product> Product { get; set; }
+        public virtual DbSet<Company> Company { get; set; }
     }
 }

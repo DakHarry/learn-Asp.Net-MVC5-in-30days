@@ -22,8 +22,6 @@ namespace MVCProject.Models
     
         public int CompanyId { get; set; }
         public string Name { get; set; }
-        public Nullable<bool> Active { get; set; }
-        public bool IdDeleted { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Product> Product { get; set; }
