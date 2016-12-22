@@ -12,7 +12,6 @@ namespace MVCProject.Controllers
         // GET: Product
         public ActionResult Index()
         {
-          
             MVCProjectEntities1 db = new MVCProjectEntities1();
             return View(db.Product);
         }
@@ -21,6 +20,19 @@ namespace MVCProject.Controllers
         {
             ProductModel pm = new ProductModel();
             return View(pm.Get());
+        }
+
+        public ActionResult Create()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult Create(string ProductName="",int CompanyId=0,int Price=0,bool Active=false,int Stock=0,bool IdDeleted=false)
+        {
+
+
+            return RedirectToAction("Index");
         }
      
     }
